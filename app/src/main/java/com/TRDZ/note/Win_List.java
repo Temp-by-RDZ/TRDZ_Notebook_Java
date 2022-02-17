@@ -1,7 +1,5 @@
 package com.TRDZ.note;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,20 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-
 import static com.TRDZ.note.MainActivity.data;
-import static com.TRDZ.note.Win_Text.ARG_INDEX;
-import static com.TRDZ.note.Win_Text.ARG_TEXT;
-import static com.TRDZ.note.Win_New.NEW_INDEX;
-import static com.TRDZ.note.Win_New.NEW_TEXT;
-import static com.TRDZ.note.Win_New.NEW_ID;
 
 public class Win_List extends Fragment {
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
@@ -154,7 +144,6 @@ public class Win_List extends Fragment {
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         }
-
 
     /**
      * Фабричный метод создания фрагмента

@@ -1,10 +1,7 @@
 package com.TRDZ.note;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +14,6 @@ import static com.TRDZ.note.MainActivity.data;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Win_New extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
