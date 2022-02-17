@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        style="@style/basic">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/B_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/T_data"/>
+        <EditText
+            android:id="@+id/E_name"
+            android:hint="@string/E_name_hint"
+            style="@style/basic"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/basic"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/T_sub"
+            android:textSize="@dimen/T_sub_size"/>
+        <CheckBox
+            android:id="@+id/S_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/S_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/S_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <CheckBox
+            android:id="@+id/S_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <EditText
+            android:id="@+id/E_content"
+            android:hint="@string/E_hint"
+            style="@style/basic"/>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/B_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/T_ok"/>
+
+</LinearLayout>

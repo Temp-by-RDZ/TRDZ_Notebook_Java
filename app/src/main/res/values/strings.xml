@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Cities</string>
+    <string name="app_name">Note</string>
+    <string name="Current_Note">CURRENT_NOTE</string>
+    <string name="T_addNote">Добавить запись</string>
+    <string name="end_line">End line</string>
+    <string name="E_hint">Содержимое заметки</string>
+    <string name="T_sub">Оформление</string>
+    <string name="E_name_hint">Название заметки</string>
+    <string name="T_data">Дата</string>
+    <string name="T_ok">Ок</string>
 </resources>

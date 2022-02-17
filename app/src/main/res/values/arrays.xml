@@ -1,17 +1,8 @@
 <resources>
-    <string-array name="cities">
-        <item>Москва</item>
-        <item>Санкт-Петербург</item>
-        <item>Екатеринбург</item>
-        <item>Новосибирск</item>
-        <item>Самара</item>
-    </string-array>
-
-    <integer-array name="coat_of_arms_imgs">
-        <item>@drawable/msc</item><!-- герб Москвы -->
-        <item>@drawable/spb</item><!-- герб Санкт-Петербурга -->
-        <item>@drawable/ebrg</item><!-- герб Екатеринбурга -->
-        <item>@drawable/nsk</item><!-- герб Новосибирска -->
-        <item>@drawable/sam</item><!-- герб Самары -->
+    <integer-array name="border_type">
+        <item>@drawable/borderline_1</item>
+        <item>@drawable/borderline_2</item>
+        <item>@drawable/borderline_3</item>
+        <item>@drawable/borderline_4</item>
     </integer-array>
 </resources>

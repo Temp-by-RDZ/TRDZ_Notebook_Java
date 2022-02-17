@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="T_sub_size">17sp</dimen>
+    <dimen name="null_dp">0dp</dimen>
+    <dimen name="empty">0dp</dimen>
+    <dimen name="Z_border">5dp</dimen>
 </resources>
