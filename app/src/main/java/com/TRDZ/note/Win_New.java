@@ -19,6 +19,7 @@ import java.util.Calendar;
 public class Win_New extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 	Button B_date;
 	Button B_ok;
+	Button B_del;
 	EditText E_name;
 	EditText E_cont;
 	CheckBox type_1;
@@ -55,13 +56,25 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 		super.onViewCreated(view, savedInstanceState);
 		try { Bundle arguments = requireArguments();
 			id = arguments.getInt(NEW_ID);
-			TextView tek = view.findViewById(R.id.E_name);
-			tek.setText(arguments.getString(NEW_TEXT));
+			TextView tek_name = view.findViewById(R.id.E_name);
+			int index;
+			String text;
+			if (id==-1){
+				index = arguments.getInt(NEW_INDEX);
+				text = arguments.getString(NEW_TEXT);
+				}
+			else{
+				TextView tek_cont = view.findViewById(R.id.E_content);
+				index = data.get_type(id);
+				text = data.get_name(id);
+				tek_cont.setText(data.get_cont(id));
+				}
+			tek_name.setText(text);
 			type_1=view.findViewById(R.id.S_1);
 			type_2=view.findViewById(R.id.S_2);
 			type_3=view.findViewById(R.id.S_3);
 			type_4=view.findViewById(R.id.S_4);
-			switch (arguments.getInt(NEW_INDEX)){
+			switch (index){
 			case 0:	type_1.setChecked(true);
 				break;
 			case 1:	type_2.setChecked(true);
@@ -79,9 +92,11 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 	public void create_buttons(View view) {
 		B_date=view.findViewById(R.id.B_date);
 		B_ok=view.findViewById(R.id.B_ok);
+		B_del=view.findViewById(R.id.B_delete);
 		E_name=view.findViewById(R.id.E_name);
 		E_cont=view.findViewById(R.id.E_content);
 		B_date.setOnClickListener(this);
+		B_del.setOnClickListener(this);
 		B_ok.setOnClickListener(this);
 		type_1.setOnClickListener(this);
 		type_2.setOnClickListener(this);
@@ -109,17 +124,22 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 		Button B_pressed = (Button) view;
 		if (B_pressed.getId()==R.id.B_date) {
 			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
-				{ DatePickerDialog forse = new DatePickerDialog(requireContext(),this,
+				{ DatePickerDialog force = new DatePickerDialog(requireContext(),this,
 						Calendar.getInstance().get(Calendar.YEAR),
 						Calendar.getInstance().get(Calendar.MONTH),
 						Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-				forse.show();}
+				force.show();}
 			}
 		if (E_name.getText().toString().equals("")) {
-			type_1.setChecked(false);
-			type_2.setChecked(false);
-			type_3.setChecked(false);
-			type_4.setChecked(false);
+			if (B_pressed.getId()!=R.id.B_ok && B_pressed.getId()!=R.id.B_delete) {
+				type_1.setChecked(false);
+				type_2.setChecked(false);
+				type_3.setChecked(false);
+				type_4.setChecked(false);
+				}
+			else {
+				getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Win_List.newInstance()).commit();
+				}
 			return;
 			}
 		if (id==-1) id=data.add(E_name.getText().toString());
@@ -147,6 +167,11 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 			type_2.setChecked(false);
 			type_3.setChecked(false);
 			data.set_type(id,3);
+			break;
+		case R.id.B_delete:
+			data.remove(id);
+			MainActivity.save(getContext());
+			getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Win_List.newInstance()).commit();
 			break;
 		case R.id.B_ok:
 			data.set_line(id,E_name.getText().toString());

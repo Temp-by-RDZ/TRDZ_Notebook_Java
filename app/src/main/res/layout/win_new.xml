@@ -53,11 +53,24 @@
             style="@style/basic"/>
     </ScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_ok"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/T_ok"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/B_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/T_ok"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_marginStart="@dimen/B_separation"
+            android:id="@+id/B_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/B_delete"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -8,4 +8,5 @@
     <string name="E_name_hint">Название заметки</string>
     <string name="T_data">Дата</string>
     <string name="T_ok">Ок</string>
+    <string name="B_delete">Удалить</string>
 </resources>

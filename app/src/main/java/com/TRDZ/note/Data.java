@@ -86,6 +86,10 @@ public class Data implements Serializable {
 		return elements.size()-1;
 		}
 
+	public void remove(int number) {
+		elements.remove(number);
+		}
+
 	public Integer Size() {
 		return elements.size();
 		}
@@ -97,7 +101,9 @@ public class Data implements Serializable {
 	public String get_line(int number) {
 		return elements.get(number).get_time() + elements.get(number).get_name();
 		}
-
+	public String get_name(int number) {
+		return elements.get(number).get_name();
+		}
 	public String get_cont(int number) {
 		return elements.get(number).get_Content();
 		}

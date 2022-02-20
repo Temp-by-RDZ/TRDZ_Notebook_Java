@@ -77,7 +77,7 @@ public class Win_List extends Fragment {
      * @param index номер заметки
      */
     private void create_info_port(int index) {
-        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index));
+        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index), index);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, detail);
@@ -90,7 +90,7 @@ public class Win_List extends Fragment {
      * @param index номер заметки
      */
     private void create_info_land(int index) {
-        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index));
+        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index), index);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_second, detail);
