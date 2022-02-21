@@ -10,7 +10,7 @@
     <string name="T_ok">Ок</string>
     <string name="B_delete">Удалить</string>
     <string name="B_change">Редактировать</string>
-    <string name="B_find">Найти</string>
+    <string name="B_sort">Отсортировать</string>
     <string name="Title">Записи</string>
     <string name="Help">Справка</string>
     <string name="Help_title1">Мои записи</string>
@@ -26,4 +26,8 @@
     <string name="Help_group2_02">Название - название заметки в списке</string>
     <string name="Help_group2_03">Тип - оформление для придания важности</string>
     <string name="Help_group2_04">Содержимое - подробная запись заметки</string>
+    <string name="Exit">Выход</string>
+    <string name="head">Head</string>
+    <string name="ND_OPEN">ND_OPEN</string>
+    <string name="ND_CLOSE">ND_CLOSE</string>
 </resources>

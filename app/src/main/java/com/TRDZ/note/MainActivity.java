@@ -5,9 +5,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         WindowList winList = (WindowList) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if (winList == null) winList = new WindowList();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, winList, FRAGMENT_TAG).commit();
+        DrawerLayout drawer = findViewById(R.id.drawer);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,findViewById(R.id.toolbar),R.string.ND_OPEN,R.string.ND_CLOSE);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigation = findViewById(R.id.V_navigation);
+        navigation.setNavigationItemSelectedListener(item -> { drawer_work(item,drawer); return false; });
         }
 
     @Override
@@ -45,7 +57,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
         }
 
-/**
+    public void drawer_work(MenuItem item, DrawerLayout drawer) {
+        switch (item.getItemId()) {
+        case (R.id.menu_help):
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
+            drawer.close();
+            break;
+        case (R.id.menu_sort):
+            data.sort();
+            MainActivity.save(this);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowList(), FRAGMENT_TAG).commit();
+            drawer.close();
+            break;
+        case (R.id.menu_exit):
+            finish();
+            }
+        }
+
+    /**
      * Загрузка данных
      */
     protected static void load(Context My_con) {

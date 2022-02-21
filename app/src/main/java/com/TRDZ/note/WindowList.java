@@ -31,7 +31,7 @@ public class WindowList extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_find) {
+        if (item.getItemId() == R.id.menu_sort) {
             data.sort();
             Refresh();
             }
