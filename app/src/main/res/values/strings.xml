@@ -9,4 +9,21 @@
     <string name="T_data">Дата</string>
     <string name="T_ok">Ок</string>
     <string name="B_delete">Удалить</string>
+    <string name="B_change">Редактировать</string>
+    <string name="B_find">Найти</string>
+    <string name="Title">Записи</string>
+    <string name="Help">Справка</string>
+    <string name="Help_title1">Мои записи</string>
+    <string name="Help_title2">Краткий справочник</string>
+    <string name="Help_group1_00">Окно заметок</string>
+    <string name="Help_group1_01">Добавить - перейти к окну создания заметки</string>
+    <string name="Help_group1_02">Клик по заметке - просмотр содержимого</string>
+    <string name="Help_group1_03">Удержание но заметке - редактирование:</string>
+    <string name="Help_group1_04"><![CDATA[     > Удаление - заметка стирается]]></string>
+    <string name="Help_group1_05"><![CDATA[     > Редактирование - перейти к окну изменения]]></string>
+    <string name="Help_group2_00">Окно создания/редактировния</string>
+    <string name="Help_group2_01">Дата - задать заметке конкретное дату</string>
+    <string name="Help_group2_02">Название - название заметки в списке</string>
+    <string name="Help_group2_03">Тип - оформление для придания важности</string>
+    <string name="Help_group2_04">Содержимое - подробная запись заметки</string>
 </resources>

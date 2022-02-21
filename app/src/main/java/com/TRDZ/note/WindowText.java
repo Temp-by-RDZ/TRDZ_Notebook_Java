@@ -15,8 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Win_Text extends Fragment implements View.OnClickListener
-    {
+public class WindowText extends Fragment implements View.OnClickListener {
     static final String ARG_ID = "ID";
     static final String ARG_INDEX = "INDEX";
     static final String ARG_TEXT = "TEXT";
@@ -36,7 +35,6 @@ public class Win_Text extends Fragment implements View.OnClickListener
 
     /**
      * Наполнение контентом
-     * @param view Экран
      * @param savedInstanceState Бекап при прирывании
      */
     @Override
@@ -61,8 +59,8 @@ public class Win_Text extends Fragment implements View.OnClickListener
      * @param index ID записи
      * @return Окно содержимого
      */
-    public static Win_Text newInstance(int index, String text, int id) {
-        Win_Text fragment = new Win_Text();
+    public static WindowText newInstance(int index, String text, int id) {
+        WindowText fragment = new WindowText();
         Bundle args = new Bundle();
         args.putInt(ARG_ID, id);
         args.putInt(ARG_INDEX, index);
@@ -71,13 +69,16 @@ public class Win_Text extends Fragment implements View.OnClickListener
         return fragment;
         }
 
+    /**
+     * Выполнение перехода к редактированию заметки
+     */
     @Override
     public void onClick(View view) {
         int segment;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             segment = R.id.fragment_container_second; }
         else segment = R.id.fragment_container;
-        Win_New detail = Win_New.newInstance(-1, "", id);
+        WindowNew detail = WindowNew.newInstance(-1, "", id);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(segment, detail);

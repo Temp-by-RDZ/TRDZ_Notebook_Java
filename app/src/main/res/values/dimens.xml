@@ -5,4 +5,5 @@
     <dimen name="empty">0dp</dimen>
     <dimen name="Z_border">5dp</dimen>
     <dimen name="B_separation">100dp</dimen>
+    <dimen name="help_sub_margin">20dp</dimen>
 </resources>

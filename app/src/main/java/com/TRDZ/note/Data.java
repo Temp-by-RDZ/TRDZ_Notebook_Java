@@ -1,7 +1,10 @@
 package com.TRDZ.note;
 
+import android.os.Build;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Data implements Serializable {
@@ -10,11 +13,11 @@ public class Data implements Serializable {
 
 	{//def Initialize
 		elements = new ArrayList<>();
-		elements.add(new line(" Хардкодовая запись 1",0));
-		elements.add(new line(" Хардкодовая запись 2",0));
-		elements.add(new line(" Хардкодовая запись 3",0));
-		elements.add(new line(" Хардкодовая запись 4",0));
-		elements.add(new line(" Хардкодовая запись 5",0));
+		elements.add(new line(" Хардкодовая запись 1", 0));
+		elements.add(new line(" Хардкодовая запись 2", 0));
+		elements.add(new line(" Хардкодовая запись 3", 0));
+		elements.add(new line(" Хардкодовая запись 4", 0));
+		elements.add(new line(" Хардкодовая запись 5", 0));
 		elements.get(0).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №1.");
 		elements.get(0).set_Type(0);
 		elements.get(1).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №2.");
@@ -64,10 +67,9 @@ public class Data implements Serializable {
 		}
 	public void load(ArrayList<Date> t1,ArrayList<Integer> t2,ArrayList<Integer> t3,ArrayList<Integer> t4,ArrayList<Integer> t5,ArrayList<String> t6,ArrayList<String> t7) {
 		elements.clear();
-		for (int i = 0; i < t1.size(); i++)
-			{
+		for (int i = 0; i < t1.size(); i++) {
 			elements.add(new line(t1.get(i),
-					t2.get(i),t3.get(i),t4.get(i),t5.get(i),t6.get(i),t7.get(i)));
+					t2.get(i), t3.get(i), t4.get(i), t5.get(i), t6.get(i), t7.get(i)));
 			}
 		}
 //endregion
@@ -77,12 +79,12 @@ public class Data implements Serializable {
 		}
 
 	public int add(String name,Integer type) {
-		elements.add(new line(name,type));
+		elements.add(new line(name, type));
 		return elements.size()-1;
 		}
 
 	public int add(String name,Integer type, int year, int month, int day) {
-		elements.add(new line(name,type,year,month,day));
+		elements.add(new line(name, type, year, month, day));
 		return elements.size()-1;
 		}
 
@@ -97,7 +99,6 @@ public class Data implements Serializable {
 	public Integer get_type(int number) {
 		return elements.get(number).get_Type();
 		}
-
 	public String get_line(int number) {
 		return elements.get(number).get_time() + elements.get(number).get_name();
 		}
@@ -111,22 +112,28 @@ public class Data implements Serializable {
 	public void set_type(int number,int type) {
 		elements.get(number).set_Type(type);
 		}
-
 	public void set_line(int number, String name) {
 		elements.get(number).set_name(name);
 		}
-
 	public void set_cont(int number,String cont) {
 		elements.get(number).set_Content(cont);
 		}
-
 	public void set_time(int number, int year, int month, int day) {
 		elements.get(number).set_time(year,month,day);
 		}
 
+	public void sort() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			Comparator<line> comparator = new Comparator<line>() {
+				@Override
+				public int compare(line line, line over) {return line.compareTo(over); }
+				};
+			elements.sort(comparator.reversed());
+			}
+		}
 
 //region Субклассы
-	protected class line {
+	protected static class line implements Comparable<line>{
 		Date time;
 		Integer type;
 		int year;
@@ -144,8 +151,8 @@ public class Data implements Serializable {
 			this.type = type;
 			time = new Date();
 			year = time.getYear()%100;
-			month= time.getMonth();
-			day  = time.getDay();
+			month= time.getMonth()+1;
+			day  = time.getDate();
 			}
 
 		public line(String name,Integer type, int year, int month, int day) {
@@ -153,7 +160,7 @@ public class Data implements Serializable {
 			this.type = type;
 			time = new Date();
 			this.year = year%100;
-			this.month= month;
+			this.month= month+1;
 			this.day  = day;
 			}
 
@@ -169,7 +176,7 @@ public class Data implements Serializable {
 
 		public void set_time(int year, int month, int day) {
 			this.year = year%100;
-			this.month= month;
+			this.month= month+1;
 			this.day  = day;}
 
 		public void set_name(String name) {
@@ -218,6 +225,14 @@ public class Data implements Serializable {
 			result.append(" ");
 		//endregion
 			return result.toString();
+			}
+
+		@Override
+		public int compareTo(line over) {
+			int result = Integer.compare(year, over.year);
+			if (result==0) result = Integer.compare(month, over.month);
+			if (result==0) result = Integer.compare(day, over.day);
+			return result;
 			}
 		}
 	//endregion

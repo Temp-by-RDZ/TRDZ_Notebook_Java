@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import java.util.Calendar;
 
-public class Win_New extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class WindowNew extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 	Button B_date;
 	Button B_ok;
 	Button B_del;
@@ -47,8 +47,6 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 
 	/**
 	 * Наполнение контентом
-	 *
-	 * @param view               Экран
 	 * @param savedInstanceState Бекап при прирывании
 	 */
 	@Override
@@ -89,6 +87,9 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 		catch (IllegalStateException ignored) {}
 		}
 
+	/**
+	 * Определение и привязка кнопок
+	 */
 	public void create_buttons(View view) {
 		B_date=view.findViewById(R.id.B_date);
 		B_ok=view.findViewById(R.id.B_ok);
@@ -109,8 +110,8 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 	 * @param index ID записи
 	 * @return Окно содержимого
 	 */
-	public static Win_New newInstance(int index, String text, int id) {
-		Win_New fragment = new Win_New();
+	public static WindowNew newInstance(int index, String text, int id) {
+		WindowNew fragment = new WindowNew();
 		Bundle args = new Bundle();
 		args.putInt(NEW_ID, id);
 		args.putInt(NEW_INDEX, index);
@@ -119,6 +120,9 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 		return fragment;
 		}
 
+	/**
+	 * Обработка процесса заполнения/редактирования заметки
+	 */
 	@Override
 	public void onClick(View view) {
 		Button B_pressed = (Button) view;
@@ -138,51 +142,59 @@ public class Win_New extends Fragment implements View.OnClickListener, DatePicke
 				type_4.setChecked(false);
 				}
 			else {
-				getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Win_List.newInstance()).commit();
+				requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
 				}
 			return;
 			}
 		if (id==-1) id=data.add(E_name.getText().toString());
 		switch (B_pressed.getId()) {
-		case R.id.S_1:
+		case (R.id.S_1):
 			type_2.setChecked(false);
 			type_3.setChecked(false);
 			type_4.setChecked(false);
 			data.set_type(id,0);
 			break;
-		case R.id.S_2:
+		case (R.id.S_2):
 			type_1.setChecked(false);
 			type_3.setChecked(false);
 			type_4.setChecked(false);
 			data.set_type(id,1);
 			break;
-		case R.id.S_3:
+		case (R.id.S_3):
 			type_1.setChecked(false);
 			type_2.setChecked(false);
 			type_4.setChecked(false);
 			data.set_type(id,2);
 			break;
-		case R.id.S_4:
+		case (R.id.S_4):
 			type_1.setChecked(false);
 			type_2.setChecked(false);
 			type_3.setChecked(false);
 			data.set_type(id,3);
 			break;
-		case R.id.B_delete:
+		case (R.id.B_delete):
 			data.remove(id);
-			MainActivity.save(getContext());
-			getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Win_List.newInstance()).commit();
+			MainActivity.save(requireContext());
+			requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
 			break;
-		case R.id.B_ok:
+		case (R.id.B_ok):
 			data.set_line(id,E_name.getText().toString());
 			data.set_cont(id,E_cont.getText().toString());
-			MainActivity.save(getContext());
-			getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,Win_List.newInstance()).commit();
+			MainActivity.save(requireContext());
+			requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
 			}
 		}
+
+	/**
+	 * Запись новой даты в базу
+	 * @param datePicker Выборщик даты
+	 * @param i  год
+	 * @param i1 месяц
+	 * @param i2 день
+	 */
 	@Override
 	public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-		B_date.setText(i%100+"/"+i1+1+"/"+i2);
+		B_date.setText((i%100+"/"+i1+1+"/"+i2));
 		if (E_name.getText().toString().equals("")) E_name.setText("День");
 		if (id==-1) id=data.add(E_name.getText().toString(),0,i,i1,i2);
 		else data.set_time(id,i,i1,i2);

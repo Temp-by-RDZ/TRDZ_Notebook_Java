@@ -3,10 +3,14 @@ package com.TRDZ.note;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +19,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import static com.TRDZ.note.MainActivity.data;
 
-public class Win_List extends Fragment {
+public class WindowList extends Fragment {
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
     private int Current_note = 0;
-    private Button B_new;
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_win_list,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_find) {
+            data.sort();
+            Refresh();
+            }
+        return super.onOptionsItemSelected(item);
+        }
 
     /**
      * Создание фрамента с указанием макета
@@ -34,12 +52,12 @@ public class Win_List extends Fragment {
 
     /**
      * Инициализация после создания и подготовки макета
-     * @param view Экран
      * @param savedInstanceState Бекап при прирывании
      */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
         if (savedInstanceState != null) Current_note = savedInstanceState.getInt(CURRENT_NOTE, 0);
         create_list(view);
         if (isLandscape()) { create_info_land(Current_note); }
@@ -48,7 +66,6 @@ public class Win_List extends Fragment {
 
     /**
      * Заполнение списка заметок
-     * @param view Экран
      */
     protected void create_list(View view) {
         LinearLayout layoutView = (LinearLayout) view.findViewById(R.id.list_block);
@@ -59,9 +76,16 @@ public class Win_List extends Fragment {
             layoutView.addView(Line);
             final int line_number = i;
             Line.setOnClickListener(v -> { create_info(line_number);});
+            Line.setOnLongClickListener(view1 -> { get_iteration(line_number, view1); return true; });
             }
         }
 
+    public void Refresh() {
+        MainActivity.save(requireContext());
+        requireActivity().getSupportFragmentManager().beginTransaction().detach(WindowList.this).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().attach(WindowList.this).commit();}
+
+//region Взаимодействие с перечнем
     /**
      * Подготовка к созданию окна с информацией
      * @param index Номер выбранной записи
@@ -73,11 +97,44 @@ public class Win_List extends Fragment {
         }
 
     /**
+     * Взаимодействие через подробное меню
+     * @param index Номер выбранной записи
+     */
+    private void get_iteration(int index, View view) {
+        PopupMenu popup = new PopupMenu(requireContext(),view);
+        requireActivity().getMenuInflater().inflate(R.menu.popup,popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                case (R.id.menu_delete):
+                    data.remove(index);
+                    Refresh();
+                    break;
+                case (R.id.menu_change):
+                    int segment;
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    segment = R.id.fragment_container_second; }
+                    else segment = R.id.fragment_container;
+                    WindowNew detail = WindowNew.newInstance(-1, "", index);
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(segment, detail);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.commit();
+                    }
+                return false;
+                }
+            });
+        popup.show();
+        }
+
+    /**
      * Вывод содержимого земетки в порт ориентации
      * @param index номер заметки
      */
     private void create_info_port(int index) {
-        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index), index);
+        WindowText detail = WindowText.newInstance(data.get_type(index),data.get_cont(index), index);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, detail);
@@ -90,31 +147,35 @@ public class Win_List extends Fragment {
      * @param index номер заметки
      */
     private void create_info_land(int index) {
-        Win_Text detail = Win_Text.newInstance(data.get_type(index),data.get_cont(index), index);
+        WindowText detail = WindowText.newInstance(data.get_type(index),data.get_cont(index), index);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_second, detail);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
         }
+//endregion
 
+//region Взаимодействие с кнопкой добавления
+    /**
+     * Подготовка к вызову окна создания новой заметки
+     */
     private void create_button(View view) {
-        B_new=view.findViewById(R.id.B_new);
-        B_new.setOnClickListener(new View.OnClickListener() {
+        Button b_new = view.findViewById(R.id.B_new);
+        b_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isLandscape()) {
-                create_new_land();}
+                if (isLandscape()) { create_new_land();}
                 else create_new_port();
                 }
             });
         }
 
     /**
-     * Вывод содержимого земетки в порт ориентации
+     * Вывод окна создяния новой заметки в порт ориентации
      */
     private void create_new_port() {
-        Win_New detail = Win_New.newInstance(-1,"",-1);
+        WindowNew detail = WindowNew.newInstance(-1,"",-1);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, detail);
@@ -123,10 +184,10 @@ public class Win_List extends Fragment {
         }
 
     /**
-     * Вывод содержимого земетки в ланд ориентации
+     * Вывод окна создяния новой заметки в ланд ориентации
      */
     private void create_new_land() {
-        Win_New detail = Win_New.newInstance(-1,"",-1);
+        WindowNew detail = WindowNew.newInstance(-1,"",-1);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_second, detail);
@@ -134,6 +195,7 @@ public class Win_List extends Fragment {
         fragmentTransaction.commit();
 
         }
+//endregion
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -148,7 +210,7 @@ public class Win_List extends Fragment {
     /**
      * Фабричный метод создания фрагмента
      */
-    public static Win_List newInstance() {
-        return new Win_List();
+    public static WindowList newInstance() {
+        return new WindowList();
         }
     }

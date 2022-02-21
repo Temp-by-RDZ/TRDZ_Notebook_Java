@@ -1,22 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?><!-- это макет для альбомной ориентации -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/Z_border"
-        android:layout_weight="7" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- Здесь будет герб выбранного города -->
-    <FrameLayout
-        android:id="@+id/fragment_container_second"
-        android:layout_width="0dp"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/Toolbar"
+            android:title="@string/Title"
+            app:title="@string/Title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/Z_border"
-        android:layout_weight="6"
-        android:background="?android:attr/detailsElementBackground" />
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/Z_border"
+            android:layout_weight="7" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container_second"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/Z_border"
+            android:layout_weight="6"
+            android:background="?android:attr/detailsElementBackground" />
+    </LinearLayout>
+
 </LinearLayout>
