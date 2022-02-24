@@ -1,5 +1,6 @@
 package com.TRDZ.note;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 	static final String NEW_TEXT = "TEXT";
 	static final String NEW_ID = "ID";
 	static int id;
+	private Executor executor;
 
 	/**
 	 * Создание фрамента с указанием макета
@@ -52,6 +54,7 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		executor = ((MainActivity) getActivity());
 		try { Bundle arguments = requireArguments();
 			id = arguments.getInt(NEW_ID);
 			TextView tek_name = view.findViewById(R.id.E_name);
@@ -173,14 +176,15 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 			data.set_type(id,3);
 			break;
 		case (R.id.B_delete):
-			data.remove(id);
-			MainActivity.save(requireContext());
-			requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
+			new AlertDialog.Builder(requireContext()).setTitle(getString(R.string.deletion)).setMessage(getString(R.string.del_confirm))
+				/*YES*/ .setPositiveButton(getString(R.string.yes), ((dialogInterface, i) -> { executor.deletion(id);}))
+				/*NO*/  .setNegativeButton(getString(R.string.no), ((dialogInterface, i) -> {}))
+				.show();
 			break;
 		case (R.id.B_ok):
 			data.set_line(id,E_name.getText().toString());
 			data.set_cont(id,E_cont.getText().toString());
-			MainActivity.save(requireContext());
+			executor.save();
 			requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
 			}
 		}

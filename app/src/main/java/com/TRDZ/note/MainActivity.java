@@ -5,8 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,17 +18,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Executor{
 
     private static final String FRAGMENT_TAG = "LIST";
     protected static Data data;
+    protected Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (data==null) data = new Data(); //Это временное обьявление данных
-        load(MainActivity.this);
+        load();
         if (savedInstanceState == null) getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new WindowList()).commit();
         setSupportActionBar(findViewById(R.id.toolbar));
         WindowList winList = (WindowList) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
@@ -51,22 +51,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_help) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
-            }
+        if (item.getItemId() == R.id.menu_help) open_help();
         return super.onOptionsItemSelected(item);
+        }
+
+    @Override
+    protected void onDestroy() {
+        if (toast!=null) toast.cancel();
+        super.onDestroy();
         }
 
     public void drawer_work(MenuItem item, DrawerLayout drawer) {
         switch (item.getItemId()) {
         case (R.id.menu_help):
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
+            open_help();
             drawer.close();
             break;
         case (R.id.menu_sort):
             data.sort();
-            MainActivity.save(this);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowList(), FRAGMENT_TAG).commit();
+            save();
+            show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
+            refresh();
             drawer.close();
             break;
         case (R.id.menu_exit):
@@ -74,11 +79,34 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    protected void refresh() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowList(), FRAGMENT_TAG).commit();
+        }
+
+    protected void open_help() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
+        }
+
+    @Override
+    public void deletion(int id) {
+        data.remove(id);
+        save();
+        refresh();
+        }
+
+    @Override
+    public void show_toast(String text, int length) {
+        if (toast!=null) toast.cancel();
+        toast = Toast.makeText(this, text,length);
+        toast.show();
+        }
+
     /**
      * Загрузка данных
      */
-    protected static void load(Context My_con) {
-        SharedPreferences myPreferences = My_con.getApplicationContext().getSharedPreferences("BIG",Context.MODE_PRIVATE);
+    @Override
+    public void load() {
+        SharedPreferences myPreferences = this.getApplicationContext().getSharedPreferences("BIG",Context.MODE_PRIVATE);
         try { data.load(
             (ArrayList<Date>) ObjectSerializer.deserialize(myPreferences.getString("T1", ObjectSerializer.serialize(data.saveT1()))),
             (ArrayList<Integer>) ObjectSerializer.deserialize(myPreferences.getString("T2", ObjectSerializer.serialize(data.saveT2()))),
@@ -95,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Сохранение данных
      */
-    public static void save(Context My_con) {
-        SharedPreferences myPreferences = My_con.getApplicationContext().getSharedPreferences("BIG",Context.MODE_PRIVATE);
+    @Override
+    public void save() {
+        SharedPreferences myPreferences = this.getApplicationContext().getSharedPreferences("BIG",Context.MODE_PRIVATE);
         SharedPreferences.Editor myEditor = myPreferences.edit();
         try {
             myEditor.putString("T1", ObjectSerializer.serialize(data.saveT1()));

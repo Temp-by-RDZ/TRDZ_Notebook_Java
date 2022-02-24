@@ -1,6 +1,7 @@
 package com.TRDZ.note;
 
 import android.os.Build;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,20 +15,13 @@ public class Data implements Serializable {
 	{//def Initialize
 		elements = new ArrayList<>();
 		elements.add(new line(" Хардкодовая запись 1", 0));
-		elements.add(new line(" Хардкодовая запись 2", 0));
-		elements.add(new line(" Хардкодовая запись 3", 0));
-		elements.add(new line(" Хардкодовая запись 4", 0));
-		elements.add(new line(" Хардкодовая запись 5", 0));
+		elements.add(new line(" Хардкодовая запись 2", 1));
+		elements.add(new line(" Хардкодовая запись 3", 2));
+		elements.add(new line(" Хардкодовая запись 4", 3));
 		elements.get(0).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №1.");
-		elements.get(0).set_Type(0);
 		elements.get(1).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №2.");
-		elements.get(1).set_Type(1);
 		elements.get(2).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №3.");
-		elements.get(2).set_Type(2);
 		elements.get(3).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №4.");
-		elements.get(3).set_Type(3);
-		elements.get(4).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №5.");
-		elements.get(4).set_Type(3);
 		}
 //region Сохранение и загрузка
 	public ArrayList<Date> saveT1() {

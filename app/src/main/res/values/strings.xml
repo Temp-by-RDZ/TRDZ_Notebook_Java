@@ -30,4 +30,9 @@
     <string name="head">Head</string>
     <string name="ND_OPEN">ND_OPEN</string>
     <string name="ND_CLOSE">ND_CLOSE</string>
+    <string name="after_sort">Отсортированно</string>
+    <string name="del_confirm">Вы уверены что хотите удалить запись?</string>
+    <string name="deletion">Удаление</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

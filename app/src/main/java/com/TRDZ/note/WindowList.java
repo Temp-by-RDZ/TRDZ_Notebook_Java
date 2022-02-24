@@ -1,5 +1,6 @@
 package com.TRDZ.note;
 
+import android.app.AlertDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,6 +25,7 @@ import static com.TRDZ.note.MainActivity.data;
 public class WindowList extends Fragment {
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
     private int Current_note = 0;
+    private Executor executor;
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -33,6 +37,7 @@ public class WindowList extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_sort) {
             data.sort();
+            executor.show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
             Refresh();
             }
         return super.onOptionsItemSelected(item);
@@ -57,6 +62,7 @@ public class WindowList extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        executor = ((MainActivity) getActivity());
         setHasOptionsMenu(true);
         if (savedInstanceState != null) Current_note = savedInstanceState.getInt(CURRENT_NOTE, 0);
         create_list(view);
@@ -81,7 +87,7 @@ public class WindowList extends Fragment {
         }
 
     public void Refresh() {
-        MainActivity.save(requireContext());
+        executor.save();
         requireActivity().getSupportFragmentManager().beginTransaction().detach(WindowList.this).commit();
         requireActivity().getSupportFragmentManager().beginTransaction().attach(WindowList.this).commit();}
 
@@ -103,28 +109,28 @@ public class WindowList extends Fragment {
     private void get_iteration(int index, View view) {
         PopupMenu popup = new PopupMenu(requireContext(),view);
         requireActivity().getMenuInflater().inflate(R.menu.popup,popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                case (R.id.menu_delete):
-                    data.remove(index);
-                    Refresh();
-                    break;
-                case (R.id.menu_change):
-                    int segment;
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    segment = R.id.fragment_container_second; }
-                    else segment = R.id.fragment_container;
-                    WindowNew detail = WindowNew.newInstance(-1, "", index);
-                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(segment, detail);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    fragmentTransaction.commit();
-                    }
-                return false;
+        popup.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()){
+            case (R.id.menu_delete):
+                new AlertDialog.Builder(requireContext()).setTitle(getString(R.string.deletion)).setMessage(getString(R.string.del_confirm))
+                    /*YES*/ .setPositiveButton(getString(R.string.yes), ((dialogInterface, i) -> {executor.deletion(index);}))
+                    /*NO*/  .setNegativeButton(getString(R.string.no), ((dialogInterface, i) -> {}))
+                    .show();
+                break;
+            case (R.id.menu_change):
+                int segment;
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                segment = R.id.fragment_container_second; }
+                else segment = R.id.fragment_container;
+                WindowNew detail = WindowNew.newInstance(-1, "", index);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(segment, detail);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.addToBackStack("");
+                fragmentTransaction.commit();
                 }
+            return false;
             });
         popup.show();
         }
@@ -162,12 +168,9 @@ public class WindowList extends Fragment {
      */
     private void create_button(View view) {
         Button b_new = view.findViewById(R.id.B_new);
-        b_new.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isLandscape()) { create_new_land();}
-                else create_new_port();
-                }
+        b_new.setOnClickListener(view1 -> {
+            if (isLandscape()) { create_new_land();}
+            else create_new_port();
             });
         }
 
