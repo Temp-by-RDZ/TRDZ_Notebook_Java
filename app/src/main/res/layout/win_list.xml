@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="9">
-        <LinearLayout
-            android:id="@+id/list_block"
-            style="@style/basic"
-            android:orientation="vertical"/>
-    </ScrollView>
+        android:layout_weight="9"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/B_new"

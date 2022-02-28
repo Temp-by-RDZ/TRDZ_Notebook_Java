@@ -20,9 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.TRDZ.note.MainActivity.data;
 
-public class WindowList extends Fragment {
+public class WindowList extends Fragment implements WindowsListIteration{
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
     private int Current_note = 0;
     private Executor executor;
@@ -74,6 +76,7 @@ public class WindowList extends Fragment {
      * Заполнение списка заметок
      */
     protected void create_list(View view) {
+    /*
         LinearLayout layoutView = (LinearLayout) view.findViewById(R.id.list_block);
         for (int i = 0; i < data.Size(); i++) {
             String name = data.get_line(i);
@@ -83,7 +86,12 @@ public class WindowList extends Fragment {
             final int line_number = i;
             Line.setOnClickListener(v -> { create_info(line_number);});
             Line.setOnLongClickListener(view1 -> { get_iteration(line_number, view1); return true; });
-            }
+            }*/
+        WindowListAdapter adapter = new WindowListAdapter();
+        adapter.set_Iteration(this);
+        RecyclerView recyclerView = view.findViewById(R.id.recycle_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
         }
 
     public void Refresh() {
@@ -96,7 +104,7 @@ public class WindowList extends Fragment {
      * Подготовка к созданию окна с информацией
      * @param index Номер выбранной записи
      */
-    private void create_info(int index) {
+    public void OnClick_create_info(int index) {
         Current_note = index;
         if (isLandscape()) create_info_land(index);
         else create_info_port(index);
@@ -106,7 +114,7 @@ public class WindowList extends Fragment {
      * Взаимодействие через подробное меню
      * @param index Номер выбранной записи
      */
-    private void get_iteration(int index, View view) {
+    public void OnPress_get_iteration(int index,View view) {
         PopupMenu popup = new PopupMenu(requireContext(),view);
         requireActivity().getMenuInflater().inflate(R.menu.popup,popup.getMenu());
         popup.setOnMenuItemClickListener(menuItem -> {

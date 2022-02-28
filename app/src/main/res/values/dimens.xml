@@ -7,4 +7,6 @@
     <dimen name="B_separation">100dp</dimen>
     <dimen name="help_sub_margin">20dp</dimen>
     <dimen name="Dravler_text">30sp</dimen>
+    <dimen name="standart_height">25dp</dimen>
+    <dimen name="line_margin">3dp</dimen>
 </resources>
