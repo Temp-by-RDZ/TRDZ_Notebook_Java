@@ -2,6 +2,7 @@ package com.TRDZ.note;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements Executor{
 
     private static final String FRAGMENT_TAG = "LIST";
+    protected static WindowListAdapter adapter;
     protected static Data data;
     protected Toast toast;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements Executor{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (not_ready()) adapter = new WindowListAdapter();
         if (data==null) data = new Data(); //Это временное обьявление данных
         load();
         if (savedInstanceState == null) getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new WindowList()).commit();
@@ -68,10 +71,9 @@ public class MainActivity extends AppCompatActivity implements Executor{
             drawer.close();
             break;
         case (R.id.menu_sort):
-            data.sort();
+            adapter.sort();
             save();
             show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
-            refresh();
             drawer.close();
             break;
         case (R.id.menu_exit):
@@ -79,19 +81,22 @@ public class MainActivity extends AppCompatActivity implements Executor{
             }
         }
 
-    protected void refresh() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowList(), FRAGMENT_TAG).commit();
-        }
-
     protected void open_help() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
         }
 
+    protected static boolean not_ready() {
+        return adapter==null;
+        }
+    public boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        }
+
     @Override
     public void deletion(int id) {
-        data.remove(id);
+        if (not_ready()) return;
+        adapter.remove(id);
         save();
-        refresh();
         }
 
     @Override

@@ -10,9 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.TRDZ.note.MainActivity.data;
+import static com.TRDZ.note.MainActivity.adapter;
 
 public class WindowList extends Fragment implements WindowsListIteration{
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
@@ -38,9 +37,8 @@ public class WindowList extends Fragment implements WindowsListIteration{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_sort) {
-            data.sort();
+            adapter.sort();
             executor.show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
-            Refresh();
             }
         return super.onOptionsItemSelected(item);
         }
@@ -68,7 +66,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
         setHasOptionsMenu(true);
         if (savedInstanceState != null) Current_note = savedInstanceState.getInt(CURRENT_NOTE, 0);
         create_list(view);
-        if (isLandscape()) { create_info_land(Current_note); }
+        if (executor.isLandscape()) { create_info_land(Current_note); }
         create_button(view);
         }
 
@@ -76,28 +74,11 @@ public class WindowList extends Fragment implements WindowsListIteration{
      * Заполнение списка заметок
      */
     protected void create_list(View view) {
-    /*
-        LinearLayout layoutView = (LinearLayout) view.findViewById(R.id.list_block);
-        for (int i = 0; i < data.Size(); i++) {
-            String name = data.get_line(i);
-            TextView Line = new TextView(getContext(),null,0,R.style.Lines);
-            Line.setText(name);
-            layoutView.addView(Line);
-            final int line_number = i;
-            Line.setOnClickListener(v -> { create_info(line_number);});
-            Line.setOnLongClickListener(view1 -> { get_iteration(line_number, view1); return true; });
-            }*/
-        WindowListAdapter adapter = new WindowListAdapter();
         adapter.set_Iteration(this);
         RecyclerView recyclerView = view.findViewById(R.id.recycle_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         }
-
-    public void Refresh() {
-        executor.save();
-        requireActivity().getSupportFragmentManager().beginTransaction().detach(WindowList.this).commit();
-        requireActivity().getSupportFragmentManager().beginTransaction().attach(WindowList.this).commit();}
 
 //region Взаимодействие с перечнем
     /**
@@ -106,7 +87,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
      */
     public void OnClick_create_info(int index) {
         Current_note = index;
-        if (isLandscape()) create_info_land(index);
+        if (executor.isLandscape()) create_info_land(index);
         else create_info_port(index);
         }
 
@@ -177,7 +158,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
     private void create_button(View view) {
         Button b_new = view.findViewById(R.id.B_new);
         b_new.setOnClickListener(view1 -> {
-            if (isLandscape()) { create_new_land();}
+            if (executor.isLandscape()) { create_new_land();}
             else create_new_port();
             });
         }
@@ -212,10 +193,6 @@ public class WindowList extends Fragment implements WindowsListIteration{
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(CURRENT_NOTE, Current_note);
         super.onSaveInstanceState(outState);
-        }
-
-    private boolean isLandscape() {
-        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         }
 
     /**

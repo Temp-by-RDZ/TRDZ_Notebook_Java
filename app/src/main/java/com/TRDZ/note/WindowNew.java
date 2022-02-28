@@ -11,10 +11,15 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import static com.TRDZ.note.MainActivity.adapter;
 import static com.TRDZ.note.MainActivity.data;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.Calendar;
 
 public class WindowNew extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
@@ -27,6 +32,7 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 	CheckBox type_2;
 	CheckBox type_3;
 	CheckBox type_4;
+	boolean is_new;
 
 	static final String NEW_INDEX = "INDEX";
 	static final String NEW_TEXT = "TEXT";
@@ -61,10 +67,12 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 			int index;
 			String text;
 			if (id==-1){
+				is_new=true;
 				index = arguments.getInt(NEW_INDEX);
 				text = arguments.getString(NEW_TEXT);
 				}
 			else{
+				is_new=false;
 				TextView tek_cont = view.findViewById(R.id.E_content);
 				index = data.get_type(id);
 				text = data.get_name(id);
@@ -145,7 +153,7 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 				type_4.setChecked(false);
 				}
 			else {
-				requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
+				close();
 				}
 			return;
 			}
@@ -185,8 +193,26 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 			data.set_line(id,E_name.getText().toString());
 			data.set_cont(id,E_cont.getText().toString());
 			executor.save();
-			requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, WindowList.newInstance()).commit();
+			adapter.change(id,is_new);
+			close();
 			}
+		}
+	private void close() {
+		if (executor.isLandscape()) restore_info_land(id);
+		else requireActivity().onBackPressed();
+		}
+
+	/**
+	 * Вывод содержимого земетки в ланд ориентации
+	 * @param index номер заметки
+	 */
+	private void restore_info_land(int index) {
+		WindowText detail = WindowText.newInstance(data.get_type(index),data.get_cont(index), index);
+		FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.replace(R.id.fragment_container_second, detail);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction.commit();
 		}
 
 	/**

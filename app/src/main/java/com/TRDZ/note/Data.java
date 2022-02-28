@@ -14,14 +14,14 @@ public class Data implements Serializable {
 
 	{//def Initialize
 		elements = new ArrayList<>();
-		elements.add(new line(" Хардкодовая запись 1", 0));
-		elements.add(new line(" Хардкодовая запись 2", 1));
-		elements.add(new line(" Хардкодовая запись 3", 2));
-		elements.add(new line(" Хардкодовая запись 4", 3));
-		elements.get(0).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №1.");
-		elements.get(1).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №2.");
-		elements.get(2).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №3.");
-		elements.get(3).set_Content(" Это пример элемента контейнера\n Здесь текст посвященный записи №4.");
+		elements.add(new line("Хардкодовая запись 1", 0));
+		elements.add(new line("Хардкодовая запись 2", 1));
+		elements.add(new line("Хардкодовая запись 3", 2));
+		elements.add(new line("Хардкодовая запись 4", 3));
+		elements.get(0).set_Content("Это пример элемента контейнера\n Здесь текст посвященный записи №1.");
+		elements.get(1).set_Content("Это пример элемента контейнера\n Здесь текст посвященный записи №2.");
+		elements.get(2).set_Content("Это пример элемента контейнера\n Здесь текст посвященный записи №3.");
+		elements.get(3).set_Content("Это пример элемента контейнера\n Здесь текст посвященный записи №4.");
 		}
 //region Сохранение и загрузка
 	public ArrayList<Date> saveT1() {
@@ -135,6 +135,7 @@ public class Data implements Serializable {
 		int day;
 		String name;
 		String content;
+		boolean done;
 
 		public line(String name) {
 			this(name,0);
@@ -185,6 +186,10 @@ public class Data implements Serializable {
 			content=text;
 			}
 
+		public void set_Status(boolean status) {
+			done = status;
+			}
+
 		public String get_Content() {
 			return content;
 			}
@@ -219,6 +224,10 @@ public class Data implements Serializable {
 			result.append(" ");
 		//endregion
 			return result.toString();
+			}
+
+		public boolean is_done() {
+			return done;
 			}
 
 		@Override

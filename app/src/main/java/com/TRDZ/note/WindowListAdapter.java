@@ -1,5 +1,6 @@
 package com.TRDZ.note;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,21 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 		return data.Size();
 		}
 
+	@SuppressLint("NotifyDataSetChanged")
+	public void sort() {
+		data.sort();
+		notifyDataSetChanged();
+		}
+
+	public void change(int index, boolean is_new) {
+		if (is_new)	notifyItemRangeInserted(data.Size()-1,1);
+		}
+
+	public void remove(int index) {
+		data.remove(index);
+		notifyItemRemoved(index);
+		}
+
 	class MyHolder extends RecyclerView.ViewHolder {
 		private final TextView L_state;
 		//private final TextView L_check; //TODO replace with check status
@@ -48,7 +64,7 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 			}
 
 		public void set_content(int number) {
-		L_state.setText(data.get_line(number));
+			L_state.setText(data.get_line(number));
 			}
 		}
 	}
