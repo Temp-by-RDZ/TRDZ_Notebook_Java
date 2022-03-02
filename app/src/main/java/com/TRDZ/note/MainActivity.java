@@ -13,6 +13,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.TRDZ.note.contein.WindowHelp;
+import com.TRDZ.note.contein.WindowList;
+import com.TRDZ.note.contein.WindowListAdapter;
+import com.TRDZ.note.data.Data;
+import com.TRDZ.note.data.ObjectSerializer;
+import com.TRDZ.note.data.Publisher;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
@@ -22,18 +28,24 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements Executor{
 
     private static final String FRAGMENT_TAG = "LIST";
-    protected static WindowListAdapter adapter;
-    protected static Data data;
-    protected Toast toast;
+    public static WindowListAdapter adapter;
+    public static Navigation navigation;
+    public static Publisher publisher;
+    public static Data data;
+    public Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (not_ready()) adapter = new WindowListAdapter();
+        if (not_ready()) {
+            adapter = new WindowListAdapter();
+            navigation = new Navigation(getSupportFragmentManager());
+            publisher = new Publisher();
+            }
         if (data==null) data = new Data(); //Это временное обьявление данных
         load();
-        if (savedInstanceState == null) getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new WindowList()).commit();
+        if (savedInstanceState == null) navigation.add(R.id.fragment_container, new WindowList(),false);
         setSupportActionBar(findViewById(R.id.toolbar));
         WindowList winList = (WindowList) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if (winList == null) winList = new WindowList();
@@ -42,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements Executor{
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,findViewById(R.id.toolbar),R.string.ND_OPEN,R.string.ND_CLOSE);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigation = findViewById(R.id.V_navigation);
-        navigation.setNavigationItemSelectedListener(item -> { drawer_work(item,drawer); return false; });
+        NavigationView navigation_view = findViewById(R.id.V_navigation);
+        navigation_view.setNavigationItemSelectedListener(item -> { drawer_work(item,drawer); return false; });
         }
 
     @Override
@@ -82,12 +94,20 @@ public class MainActivity extends AppCompatActivity implements Executor{
         }
 
     protected void open_help() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WindowHelp()).addToBackStack("").commit();
+        navigation.replace(R.id.fragment_container, new WindowHelp(),true);
         }
 
-    protected static boolean not_ready() {
-        return adapter==null;
+    public Navigation get_Navigation() {
+            return navigation;
+            }
+    public Publisher get_Publisher() {
+        return publisher;
         }
+
+    public static boolean not_ready() {
+        return adapter==null || navigation==null || navigation.is_corrupted();
+        }
+
     public boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         }

@@ -1,4 +1,4 @@
-package com.TRDZ.note;
+package com.TRDZ.note.contein;
 
 import android.app.AlertDialog;
 import android.content.res.Configuration;
@@ -23,7 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.TRDZ.note.MainActivity.data;
 import static com.TRDZ.note.MainActivity.adapter;
 
-public class WindowList extends Fragment implements WindowsListIteration{
+import com.TRDZ.note.Executor;
+import com.TRDZ.note.MainActivity;
+import com.TRDZ.note.R;
+
+public class WindowList extends Fragment implements WindowsListIteration {
+
     private static final String CURRENT_NOTE = "CURRENT_NOTE";
     private int Current_note = 0;
     private Executor executor;
@@ -38,6 +43,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_sort) {
             adapter.sort();
+            executor.save();
             executor.show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
             }
         return super.onOptionsItemSelected(item);
@@ -130,11 +136,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
      */
     private void create_info_port(int index) {
         WindowText detail = WindowText.newInstance(data.get_type(index),data.get_cont(index), index);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, detail);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack("").commit();
+        ((MainActivity) requireActivity()).get_Navigation().replace(R.id.fragment_container,detail,true);
         }
 
     /**
@@ -143,11 +145,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
      */
     private void create_info_land(int index) {
         WindowText detail = WindowText.newInstance(data.get_type(index),data.get_cont(index), index);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_second, detail);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
+        ((MainActivity) requireActivity()).get_Navigation().replace(R.id.fragment_container_second,detail,false);
         }
 //endregion
 
@@ -168,11 +166,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
      */
     private void create_new_port() {
         WindowNew detail = WindowNew.newInstance(-1,"",-1);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, detail);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack("").commit();
+        ((MainActivity) requireActivity()).get_Navigation().replace(R.id.fragment_container,detail,true);
         }
 
     /**
@@ -180,12 +174,7 @@ public class WindowList extends Fragment implements WindowsListIteration{
      */
     private void create_new_land() {
         WindowNew detail = WindowNew.newInstance(-1,"",-1);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container_second, detail);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
-
+        ((MainActivity) requireActivity()).get_Navigation().replace(R.id.fragment_container_second,detail,false);
         }
 //endregion
 
@@ -195,10 +184,4 @@ public class WindowList extends Fragment implements WindowsListIteration{
         super.onSaveInstanceState(outState);
         }
 
-    /**
-     * Фабричный метод создания фрагмента
-     */
-    public static WindowList newInstance() {
-        return new WindowList();
-        }
     }

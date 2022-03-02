@@ -1,4 +1,4 @@
-package com.TRDZ.note;
+package com.TRDZ.note.contein;
 
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -12,8 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
+import com.TRDZ.note.MainActivity;
+import com.TRDZ.note.R;
 
 public class WindowText extends Fragment implements View.OnClickListener {
     static final String ARG_ID = "ID";
@@ -43,13 +44,13 @@ public class WindowText extends Fragment implements View.OnClickListener {
         try { Bundle arguments = requireArguments();
             TextView tek = view.findViewById(R.id.list_content);
             tek.setText(arguments.getString(ARG_TEXT));
-            int index = arguments.getInt(ARG_INDEX);
             id = arguments.getInt(ARG_ID);
             ImageView image = view.findViewById(R.id.I_borderline_type);
             TypedArray images = getResources().obtainTypedArray(R.array.border_type);
+            int index = arguments.getInt(ARG_INDEX);
             image.setImageResource(images.getResourceId(index, 0));
-            image.setOnClickListener(this);
             images.recycle();
+            image.setOnClickListener(this);
             }
         catch (IllegalStateException ignored) {}
         }
@@ -79,11 +80,6 @@ public class WindowText extends Fragment implements View.OnClickListener {
             segment = R.id.fragment_container_second; }
         else segment = R.id.fragment_container;
         WindowNew detail = WindowNew.newInstance(-1, "", id);
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(segment, detail);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack("");
-        fragmentTransaction.commit();
+        ((MainActivity) requireActivity()).get_Navigation().replace(segment,detail,true);
         }
     }

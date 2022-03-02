@@ -1,4 +1,4 @@
-package com.TRDZ.note;
+package com.TRDZ.note.data;
 
 import android.os.Build;
 import android.widget.Toast;

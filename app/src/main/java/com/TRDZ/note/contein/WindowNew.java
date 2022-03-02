@@ -1,4 +1,4 @@
-package com.TRDZ.note;
+package com.TRDZ.note.contein;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -19,6 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.TRDZ.note.Executor;
+import com.TRDZ.note.MainActivity;
+import com.TRDZ.note.R;
 
 import java.util.Calendar;
 
@@ -197,6 +201,7 @@ public class WindowNew extends Fragment implements View.OnClickListener, DatePic
 			close();
 			}
 		}
+
 	private void close() {
 		if (executor.isLandscape()) restore_info_land(id);
 		else requireActivity().onBackPressed();

@@ -1,4 +1,4 @@
-package com.TRDZ.note;
+package com.TRDZ.note.contein;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.TRDZ.note.R;
 
 public class WindowHelp extends Fragment {
 
