@@ -1,4 +1,6 @@
-package com.TRDZ.note;
+package com.TRDZ.note.contein;
+
+import static com.TRDZ.note.MainActivity.data;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -9,7 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import static com.TRDZ.note.MainActivity.data;
+
+import com.TRDZ.note.R;
 
 public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.MyHolder> {
 
@@ -21,9 +24,9 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 
 	@NonNull
 	@Override
-	public WindowListAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-		return new MyHolder(inflater.inflate(R.layout.win_list_item,parent,false));
+		return new MyHolder(inflater.inflate(R.layout.win_list_item, parent, false));
 		}
 
 	@Override
@@ -43,7 +46,7 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 		}
 
 	public void change(int index, boolean is_new) {
-		if (is_new)	notifyItemRangeInserted(data.Size()-1,1);
+		if (is_new) notifyItemRangeInserted(data.Size() - 1, 1);
 		else notifyItemChanged(index);
 		}
 
@@ -54,14 +57,13 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 
 	class MyHolder extends RecyclerView.ViewHolder {
 		private final TextView L_state;
-		//private final TextView L_check; //TODO replace with check status
 
 		public MyHolder(@NonNull View itemView) {
 			super(itemView);
 			LinearLayout line = (LinearLayout) itemView.findViewById(R.id.list_block);
 			L_state = line.findViewById(R.id.T_name);
-			L_state.setOnClickListener(view ->{if (iteration!=null) iteration.OnClick_create_info(getLayoutPosition()); });
-			L_state.setOnLongClickListener(v ->{if (iteration!=null) iteration.OnPress_get_iteration(getLayoutPosition(),v); return true;});
+			L_state.setOnClickListener(view -> { if (iteration != null) iteration.OnClick_create_info(getLayoutPosition()); });
+			L_state.setOnLongClickListener(v -> { if (iteration != null) iteration.OnPress_get_iteration(getLayoutPosition(), v);return true; });
 			}
 
 		public void set_content(int number) {

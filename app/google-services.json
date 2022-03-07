@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "986670565116",
+    "project_id": "trdz-task03as-note",
+    "storage_bucket": "trdz-task03as-note.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986670565116:android:6baa6c9814f75f89c47979",
+        "android_client_info": {
+          "package_name": "com.example.cities"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986670565116-v03vji6qi308e9perd3gpin0726e9rcs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-w8_2ip1jBRu36pLTU4E-c06sNocl2-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986670565116-v03vji6qi308e9perd3gpin0726e9rcs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
