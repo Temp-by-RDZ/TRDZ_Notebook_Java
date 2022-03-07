@@ -19,15 +19,20 @@ import com.TRDZ.note.contein.WindowListAdapter;
 import com.TRDZ.note.data.Data;
 import com.TRDZ.note.data.ObjectSerializer;
 import com.TRDZ.note.data.Publisher;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements Executor{
 
     private static final String FRAGMENT_TAG = "LIST";
+    FirebaseFirestore db;
     public static WindowListAdapter adapter;
     public static Navigation navigation;
     public static Publisher publisher;
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements Executor{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = FirebaseFirestore.getInstance();
         if (not_ready()) {
             adapter = new WindowListAdapter();
             navigation = new Navigation(getSupportFragmentManager());
@@ -160,7 +166,29 @@ public class MainActivity extends AppCompatActivity implements Executor{
             myEditor.putString("T5", ObjectSerializer.serialize(data.saveT5()));
             myEditor.putString("T6", ObjectSerializer.serialize(data.saveT6()));
             myEditor.putString("T7", ObjectSerializer.serialize(data.saveT7()));
+            HashMap<String, Object> pakeje = new HashMap<>();
+            pakeje.put("T1", ObjectSerializer.serialize(data.saveT1()));
+            pakeje.put("T2", ObjectSerializer.serialize(data.saveT2()));
+            pakeje.put("T3", ObjectSerializer.serialize(data.saveT3()));
+            pakeje.put("T4", ObjectSerializer.serialize(data.saveT4()));
+            pakeje.put("T5", ObjectSerializer.serialize(data.saveT5()));
+            pakeje.put("T6", ObjectSerializer.serialize(data.saveT6()));
+            pakeje.put("T7", ObjectSerializer.serialize(data.saveT7()));
+            add_to_cloud(pakeje);
             }
         catch (IOException e) { e.printStackTrace(); }
-        myEditor.apply();}
+        myEditor.apply();
+        }
+
+    public void add_to_cloud(HashMap<String, Object> pakeje) {
+        db.collection("Big")
+            .add(pakeje)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    }
+                });
+        }
     }
+
+
