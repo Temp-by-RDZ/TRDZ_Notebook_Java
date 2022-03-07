@@ -19,15 +19,20 @@ import com.TRDZ.note.contein.WindowListAdapter;
 import com.TRDZ.note.data.Data;
 import com.TRDZ.note.data.ObjectSerializer;
 import com.TRDZ.note.data.Publisher;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Executor{
 
@@ -94,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements Executor{
             show_toast(getString(R.string.after_sort),Toast.LENGTH_SHORT);
             drawer.close();
             break;
+        case (R.id.menu_fload):
+            loadf();
+            save();
+            drawer.close();
+            break;
         case (R.id.menu_exit):
             finish();
             }
@@ -152,6 +162,37 @@ public class MainActivity extends AppCompatActivity implements Executor{
         }
 
     /**
+     * Загрузка данных Firestore
+     */
+    public void loadf() {
+        db.collection("Big")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    Map<String, Object> pakeje = new HashMap<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        pakeje = document.getData();
+                        try {
+                            data.load(
+                                (ArrayList<Date>) ObjectSerializer.deserialize(pakeje.get("T1").toString()),
+                                (ArrayList<Integer>) ObjectSerializer.deserialize(pakeje.get("T2").toString()),
+                                (ArrayList<Integer>) ObjectSerializer.deserialize(pakeje.get("T3").toString()),
+                                (ArrayList<Integer>) ObjectSerializer.deserialize(pakeje.get("T4").toString()),
+                                (ArrayList<Integer>) ObjectSerializer.deserialize(pakeje.get("T5").toString()),
+                                (ArrayList<String>) ObjectSerializer.deserialize(pakeje.get("T6").toString()),
+                                (ArrayList<String>) ObjectSerializer.deserialize(pakeje.get("T7").toString())
+                                );
+                            adapter.reload();
+                            }
+                        catch (IOException | ClassNotFoundException e) { e.printStackTrace();  }
+                        }
+                    }
+                }
+            });
+        }
+    /**
      * Сохранение данных
      */
     @Override
@@ -166,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements Executor{
             myEditor.putString("T5", ObjectSerializer.serialize(data.saveT5()));
             myEditor.putString("T6", ObjectSerializer.serialize(data.saveT6()));
             myEditor.putString("T7", ObjectSerializer.serialize(data.saveT7()));
-            HashMap<String, Object> pakeje = new HashMap<>();
+            Map<String, Object> pakeje = new HashMap<>();
             pakeje.put("T1", ObjectSerializer.serialize(data.saveT1()));
             pakeje.put("T2", ObjectSerializer.serialize(data.saveT2()));
             pakeje.put("T3", ObjectSerializer.serialize(data.saveT3()));
@@ -180,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements Executor{
         myEditor.apply();
         }
 
-    public void add_to_cloud(HashMap<String, Object> pakeje) {
+    public void add_to_cloud(Map<String, Object> pakeje) {
         db.collection("Big")
             .add(pakeje)
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

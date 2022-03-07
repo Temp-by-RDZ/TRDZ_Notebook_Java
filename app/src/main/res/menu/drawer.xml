@@ -12,6 +12,10 @@
             android:icon="@drawable/ic_sort"
             android:title="@string/B_sort"/>
         <item
+            android:id="@+id/menu_fload"
+            android:icon="@drawable/ic_sort"
+            android:title="@string/menu_fload"/>
+        <item
             android:id="@+id/menu_exit"
             android:icon="@android:drawable/ic_menu_close_clear_cancel"
             android:title="@string/Exit"/>

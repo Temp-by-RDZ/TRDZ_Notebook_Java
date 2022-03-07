@@ -45,6 +45,11 @@ public class WindowListAdapter extends RecyclerView.Adapter<WindowListAdapter.My
 		notifyDataSetChanged();
 		}
 
+	@SuppressLint("NotifyDataSetChanged")
+	public void reload() {
+		notifyDataSetChanged();
+		}
+
 	public void change(int index, boolean is_new) {
 		if (is_new) notifyItemRangeInserted(data.Size() - 1, 1);
 		else notifyItemChanged(index);

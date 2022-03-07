@@ -35,4 +35,5 @@
     <string name="deletion">Удаление</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="menu_fload">Загрузить из облака</string>
 </resources>
